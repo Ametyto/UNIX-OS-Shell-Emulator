@@ -1,0 +1,66 @@
+::-webkit-scrollbar { width: 0;}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-family: 'Consolas', 'Courier New', monospace;
+    height: 100vh;
+    display: flex;
+}
+
+#terminal {
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+#output {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.line {
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.line.user {
+    color: #ffec58;
+}
+
+.line.system {
+    color: #8b949e;
+}
+
+#input {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#prompt {
+    color: #9e3fb9;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+#cmd-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f0f6fc;
+    font-family: inherit;
+    font-size: 1rem;
+}
