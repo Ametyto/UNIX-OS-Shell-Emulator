@@ -1,0 +1,4 @@
+help
+echo $HOME $TEST
+$HOME
+cd $HOME

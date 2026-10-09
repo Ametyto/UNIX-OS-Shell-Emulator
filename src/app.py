@@ -4,6 +4,7 @@ import getpass
 import platform
 import json
 import re
+import argparse
 
 username = getpass.getuser()
 hostname = platform.node()
@@ -20,6 +21,37 @@ with open(commands_path, "r", encoding="utf-8") as commands_file:
 home = os.environ.get('HOME') or os.environ.get('USERPROFILE')
 variables = {"HOME":home,
              "TEST":"TEST_T"}
+config = {
+    "vfs_path" : "",
+    "script_path" : ""
+}
+
+def init_config():
+    global config
+    parser = argparse.ArgumentParser(description="UNIX OS Shell Emulator")
+    parser.add_argument("--vfs")
+    parser.add_argument("--script")
+
+    args, _ = parser.parse_known_args()
+
+    if args.vfs:
+        if os.path.exists(args.vfs):
+            config["vfs_path"] = os.path.abspath(args.vfs)
+        else:
+            config["vfs_path"] = "not found"
+            print("[ПРЕДУПРЕЖДЕНИЕ] Путь к VFS не был найден.")
+    else:
+        config["vfs_path"] = "not specified"
+
+    if args.script:
+        if os.path.exists(args.script) and os.path.isfile(args.script):
+            config["script_path"] = os.path.abspath(args.script)
+        else:
+            config["script_path"] = "not found"
+            print("[ПРЕДУПРЕЖДЕНИЕ] Путь к скрипту не был найден.")
+    else:
+        config["script_path"] = "not specified"
+
 
 def get_var_value(match):
     var_name = match.group(1)
@@ -36,17 +68,30 @@ def get_user():
     return username
 
 @eel.expose
+def run_start_script():
+    script_path = config.get("script_path")
+    if not script_path or not os.path.exists(script_path):
+        return ["__ERROR_NO_PATH__"]
+    file = open(script_path, "r", encoding="utf-8")
+    result = []
+    for line in file:
+        cmd = line.strip()
+        if cmd:
+            result.append(cmd)
+            result.append(process_command(cmd))
+    return result
+
+@eel.expose
 def process_command(cmd: str) -> str:
     cmd = cmd.strip()
     if not cmd:
         return ""
 
-    parts = cmd.split(maxsplit=1)
-    command = parts[0].lower()
-    args_joined = parts[1] if len(parts) > 1 else ""
-    args = replace_vars(args_joined).split()
-    if "__NOT_FOUND__" in args:
-        return "Ошибка. Переменной не существует."
+    parts = replace_vars(cmd).split(maxsplit=1)
+    if "__NOT_FOUND__" in parts:
+            return "Ошибка. Переменной не существует."
+    command = parts[0]
+    args = parts[1].split() if len(parts) > 1 else ""
 
     if command == "help":
         if len(args)==0:
@@ -58,11 +103,15 @@ def process_command(cmd: str) -> str:
         else:
             return f"Неправильный аргумент. Команды {args[0]} не существует."
     elif command == "echo":
-        return f"echo {", ".join(map(str, args))}"
+        return f"{" ".join(map(str, args))}"
     elif command == "ls" or command == "cd":
         if len(args)>0:
             return f"Команда: {command}, аргументы: {" ".join(str(arg) for arg in args)}"
         return f"Команда: {command}, аргументы: нет"
+    elif command == "conf-dump":
+        if len(args)>0:
+            return f"Команда {command} не принимает аргументов."
+        return f"vfs: {config['vfs_path']}\nscript: {config['script_path']}"
     elif command == "exit":
         if len(args)>0:
             return f"Команда {command} не принимает аргументов."
@@ -71,4 +120,5 @@ def process_command(cmd: str) -> str:
         return f"Несуществующая команда: {command}"
 
 if __name__ == "__main__":
+    init_config()
     eel.start("index.html", mode='edge', size=(800, 500))

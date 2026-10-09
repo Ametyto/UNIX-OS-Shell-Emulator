@@ -7,7 +7,29 @@ window.addEventListener('DOMContentLoaded', async () => {
     const user = await eel.get_user()();
     document.title = "Эмулятор — [" + user + "]";
     document.getElementById('prompt').textContent = user+":~$ ";
+    console.log("start_script");
+    start_script(user);
 });
+
+async function start_script(user){
+    const print_result = await eel.run_start_script()();
+    if (print_result.length < 2){
+        return;
+    }
+    for (let i = 0; i < print_result.length; i+=2){
+        const cmd = print_result[i];
+        const response = print_result[i+1];
+        console.log(i);
+        appendLine(`${user}:~$ ${cmd}`, 'user');
+        if (response === '__EXIT__') {
+            window.close();
+        } else if (response) {
+            appendLine(response, 'response');
+        }
+
+        output.scrollTop = output.scrollHeight;
+    }
+}
 
 document.addEventListener('contextmenu', event => event.preventDefault());
 
@@ -29,7 +51,6 @@ input.addEventListener('keydown', async (event) => {
         const cmd = input.value.trim();
         const user = await eel.get_user()();
         input.value = '';
-        console.log(cmd);
 
         if (!cmd) return;
 

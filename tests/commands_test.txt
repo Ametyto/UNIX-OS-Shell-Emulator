@@ -1,0 +1,6 @@
+help
+echo uwu
+testing
+cd kawaii owo
+help help help help
+conf-dump
