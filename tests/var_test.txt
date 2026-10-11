@@ -1,4 +1,4 @@
 help
-echo $HOME $TEST
+echo $USER $HOSTNAME
 $HOME
 cd $HOME

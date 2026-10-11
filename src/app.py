@@ -11,7 +11,7 @@ eel.init(web_dir)
 
 @eel.expose
 def get_user():
-    return environment.username
+    return environment.userhost
 
 @eel.expose
 def run_start_script():

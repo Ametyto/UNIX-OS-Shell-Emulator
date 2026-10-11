@@ -5,11 +5,14 @@ import platform
 
 username = getpass.getuser()
 hostname = platform.node()
-username = f"{username}@{hostname}"
+userhost = f"{username}@{hostname}"
 
 home = os.environ.get('HOME') or os.environ.get('USERPROFILE')
-variables = {"HOME":home,
-             "TEST":"TEST_T"}
+variables = {
+    "HOME": home,
+    "USER": username,
+    "HOSTNAME": hostname
+}
 
 def get_var_value(match):
     var_name = match.group(1)
