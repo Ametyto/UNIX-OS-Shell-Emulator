@@ -11,13 +11,13 @@ eel.init(web_dir)
 
 @eel.expose
 def get_user():
-    return environment.userhost
+    return environment.USERHOST
 
 @eel.expose
 def run_start_script():
     script_path = config.settings.get("script_path")
     if not script_path or not os.path.exists(script_path):
-        return ["__ERROR_NO_PATH__"]
+        return ["__NO_PATH__"]
     file = open(script_path, "r", encoding="utf-8")
     result = []
     for line in file:

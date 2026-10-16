@@ -2,8 +2,8 @@ import config
 
 errors = {
     "too_many_args": "Слишком много аргументов.",
-    "args_not_provided": lambda command: f"Команда {command} не принимает аргументов.",
-    "cmd_not_exist": lambda command: f"Несуществующая команда: {command}"
+    "args_not_provided": lambda cmd: f"Команда {cmd} не принимает аргументов.",
+    "cmd_not_exist": lambda cmd: f"Несуществующая команда: {cmd}"
 }
 
 def cmd_help(command, args):
@@ -22,7 +22,9 @@ def cmd_echo(command, args):
 def cmd_conf_dump(command, args):
     if len(args)>0:
         return errors["args_not_provided"](command)
-    return f"vfs: {config.settings['vfs_path']}\nscript: {config.settings['script_path']}"
+    vfs_message = f"vfs: {config.settings['vfs_path']}"
+    script_message = f"script: {config.settings['script_path']}"
+    return vfs_message + "\n" + script_message
 
 def cmd_exit(command, args):
     if len(args)>0:
@@ -31,17 +33,21 @@ def cmd_exit(command, args):
 
 def stub(command, args):
     if len(args)>0:
-        return f"Команда: {command}, аргументы: {" ".join(str(arg) for arg in args)}"
+        args_better = " ".join(str(arg) for arg in args)
+        return f"Команда: {command}, аргументы: {args_better}"
     return f"Команда: {command}, аргументы: нет"
 
 commands = {
     "help": {
         "func": cmd_help,
-        "desc": "Команда help позволяет узнать информацию о доступных коммандах. Можно ввести один аргумент, соответствующий команде, чтобы узнать о ней и её синтаксисе. Пример: help exit"
+        "desc": "Команда help позволяет узнать информацию о доступных"
+        " командах. Можно ввести один аргумент, соответствующий команде,"
+        " чтобы узнать о ней и её синтаксисе. Пример: help exit"
     },
     "echo": {
         "func": cmd_echo,
-        "desc": "Команда echo выводит переданный ей текст или значение переменных на экран"
+        "desc": "Команда echo выводит переданный ей текст"
+        "или значение переменных на экран. Пример: echo $USER"
     },
     "cd": {
         "func": stub,
@@ -57,6 +63,7 @@ commands = {
     },
     "conf-dump": {
         "func": cmd_conf_dump,
-        "desc": "Команда conf-dump выводит информацию о текущих параметрах приложения. Аргументы не предполагаются."
+        "desc": "Команда conf-dump выводит информацию"
+        "о текущих параметрах приложения. Аргументы не предполагаются."
     },
 }

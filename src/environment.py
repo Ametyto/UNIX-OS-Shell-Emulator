@@ -3,15 +3,15 @@ import os
 import getpass
 import platform
 
-username = getpass.getuser()
-hostname = platform.node()
-userhost = f"{username}@{hostname}"
+USERNAME = getpass.getuser()
+HOSTNAME = platform.node()
+USERHOST = f"{USERNAME}@{HOSTNAME}"
+HOME = os.environ.get('HOME') or os.environ.get('USERPROFILE')
 
-home = os.environ.get('HOME') or os.environ.get('USERPROFILE')
 variables = {
-    "HOME": home,
-    "USER": username,
-    "HOSTNAME": hostname
+    "HOME": HOME,
+    "USER": USERNAME,
+    "HOSTNAME": HOSTNAME
 }
 
 def get_var_value(match):

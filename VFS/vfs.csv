@@ -1,0 +1,5 @@
+id	parent_id	name	is_dir	content	size	created_at
+1	0	root	true		0	12.10.2026 19:00
+2	1	documents	true		0	12.10.2026 19:00
+3	2	note.txt	false	AC?5@ <530 B5:AB 67	64	12.10.2026 19:00
+4	1	picture.jpg	false	B8?0 :0@B8=:0	2048	12.10.2026 20:00

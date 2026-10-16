@@ -12,13 +12,13 @@ window.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function start_script(user){
-    const print_result = await eel.run_start_script()();
-    if (print_result.length < 2){
+    const printResult = await eel.run_start_script()();
+    if (printResult.length < 2){
         return;
     }
-    for (let i = 0; i < print_result.length; i+=2){
-        const cmd = print_result[i];
-        const response = print_result[i+1];
+    for (let i = 0; i < printResult.length; i+=2){
+        const cmd = printResult[i];
+        const response = printResult[i+1];
         console.log(i);
         appendLine(`${user}:~$ ${cmd}`, 'user');
         if (response === '__EXIT__') {

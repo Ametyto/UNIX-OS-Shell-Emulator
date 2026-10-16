@@ -1,1 +1,1 @@
-python src/app.py --vfs VFS/test_vfs.csv
+python src/app.py --vfs VFS/vfs.csv
